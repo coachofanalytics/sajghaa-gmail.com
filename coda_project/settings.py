@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     "django_crontab",
     'memberjoin',
     'communities',
-    'debug_toolbar',
+    #'debug_toolbar',
 
 ]
 
@@ -91,9 +91,17 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'allauth.account.middleware.AccountMiddleware',
     # 'Middleware.MiddlewareFile.MailMiddleware'
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 
 ]
+
+# Conditionally add debug_toolbar only in development
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar']
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+    print("✅ Debug Toolbar loaded for development")
+
+
 
 CSRF_COOKIE_SECURE = False
 
@@ -245,10 +253,13 @@ STATIC_ROOT = os.path.join(BASE_DIR,  "staticfiles")
 STATIC_URL = "/static/"
 
 
-if DEBUG:
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-else:
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+#if DEBUG:
+#    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+#else:
+ #   STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
+ # Static files storage
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
