@@ -96,11 +96,18 @@ MIDDLEWARE = [
 ]
 
 # Conditionally add debug_toolbar only in development
-if DEBUG:
-    INSTALLED_APPS += ['debug_toolbar']
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
-    print("✅ Debug Toolbar loaded for development")
+ON_HEROKU = 'DYNO' in os.environ
 
+if not ON_HEROKU and DEBUG:
+    try:
+        import debug_toolbar
+        INSTALLED_APPS += ['debug_toolbar']
+        MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+        print(" Debug Toolbar loaded for local development")
+    except ImportError:
+        print(" Debug Toolbar not installed locally")
+else:
+    print(f" Running on Heroku: {ON_HEROKU}, DEBUG: {DEBUG} - debug_toolbar disabled")
 
 
 CSRF_COOKIE_SECURE = False
