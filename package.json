@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "tailwindcss": "^4.1.14"
+  },
+  "dependencies": {
+    "heroku": "^8.7.1"
   }
 }
